@@ -315,11 +315,6 @@
             font-size: 1.6em;
         }
 
-        .dominant-style .style-name::before {
-            content: '👑';
-            font-size: 1.2em;
-        }
-
         .style-description {
             margin-top: 30px;
             padding: 30px;
@@ -821,45 +816,22 @@
                 }
             }
 
+            // Показываем только доминирующий стиль без баллов
+            const dominantDescription = styleDescriptions[dominantStyle];
             let resultsHTML = `
-                <div class="results-header">
-                    <h3>🎯 Ваши результаты теста</h3>
-                    <p>Анализ стилей поведения в конфликтных ситуациях</p>
-                </div>
                 <div class="results-content">
-            `;
-
-            // Показываем все стили с баллами и прогресс-барами
-            for (let style = 1; style <= 5; style++) {
-                const isDominant = style === dominantStyle;
-                const styleClass = isDominant ? 'style-result dominant-style' : 'style-result';
-                const percentage = Math.round((scores[style] / 30) * 100);
-                
-                resultsHTML += `
-                    <div class="${styleClass}">
-                        <div class="style-name">${styleNames[style]}</div>
-                        <div class="style-score">Баллы: ${scores[style]} из 30 (${percentage}%)</div>
-                        <div class="score-bar">
-                            <div class="score-fill" style="width: ${percentage}%"></div>
+                    <div class="style-result dominant-style">
+                        <div class="style-name">Ваш доминирующий стиль поведения в конфликтных ситуациях: ${styleNames[dominantStyle]}</div>
+                        
+                        <div style="margin-top: 25px;">
+                            <h5 style="color: #059669; margin-bottom: 15px; font-size: 1.2em; font-weight: 600;">${dominantDescription.description}</h5>
+                            <ul style="margin-left: 20px;">
+                                ${dominantDescription.points.map(point => `<li style="margin-bottom: 10px; line-height: 1.7; color: #374151;">${point}</li>`).join('')}
+                            </ul>
                         </div>
                     </div>
-                `;
-            }
-
-            // Показываем подробное описание доминирующего стиля
-            const dominantDescription = styleDescriptions[dominantStyle];
-            resultsHTML += `
-                <div class="style-description">
-                    <h4>🏆 Ваш доминирующий стиль: ${dominantDescription.title}</h4>
-                    <h5>${dominantDescription.description}</h5>
-                    <ul>
-                        ${dominantDescription.points.map(point => `<li>${point}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-
-            resultsHTML += `
-                    <button class="restart-btn" onclick="restartTest()">🔄 Пройти тест заново</button>
+                    
+                    <button class="restart-btn" onclick="restartTest()">Пройти тест заново</button>
                 </div>
             `;
 
